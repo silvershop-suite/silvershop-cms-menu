@@ -1,0 +1,12 @@
+nl:
+  'SilverShop\CmsMenu':
+    Toggle: 'Groep in-/uitklappen'
+  'SilverShop\CmsMenu\Group':
+    Shop: 'Shop'
+    Catalog: 'Catalogus'
+    Finance: 'Financieel'
+    Fulfilment: 'Afhandeling'
+    Marketing_customers: 'Marketing & klanten'
+    Insights: 'Inzichten'
+    Content: 'Content'
+    Settings: 'Instellingen'

@@ -1,0 +1,112 @@
+---
+Name: silvershop-cms-menu
+After: 'framework/*, cms/*'
+---
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'silvershop-suite/cms-menu:client/css/cms-menu.css'
+  extra_requirements_javascript:
+    - 'silvershop-suite/cms-menu:client/js/cms-menu.js'
+  extensions:
+    - SilverShop\CmsMenu\Extension\LeftAndMainMenuExtension
+
+# Live badge-count endpoint (only polled when CmsMenu.badge_poll_interval > 0; the badge itself is
+# rendered server-side on every menu render regardless of polling).
+SilverStripe\Control\Director:
+  rules:
+    'admin/cms-menu//$Action': 'SilverShop\CmsMenu\Control\BadgeController'
+
+SilverShop\CmsMenu\CmsMenu:
+  # Icon colour/opacity = better-menu's tuned look (the SilverStripe dark-blue header colour @ 80%).
+  icon_color: '#005a93'
+  icon_opacity: 0.8
+  # Top-of-menu profile + logout icons (swapped client-side to Lucide glyphs).
+  profile_icon: 'ss-icon-circle-user'
+  logout_icon: 'ss-icon-log-out'
+
+  # The suite menu IA (PLAN-cms-menu §5). Only sections whose controller class is actually installed
+  # render; a group with fewer than 2 present children collapses to an inline row (or nothing).
+  # Unlisted sections stay native. Group order = priority DESC; item order within a group = config
+  # order. FQCNs for not-yet-installed modules are harmless when absent.
+  menu:
+    - group: 'Shop'
+      icon: 'ss-icon-shopping-bag'
+      priority: 100
+      children:
+        - section: 'SilverShop\Admin\OrdersAdmin'
+          icon: 'ss-icon-shopping-cart'
+          badge: 'SilverShop\CmsMenu\AttentionBadge::orderAttentionCount'
+    - group: 'Catalog'
+      icon: 'ss-icon-package'
+      priority: 90
+      children:
+        - section: 'SilverShop\Admin\ProductCatalogAdmin'
+          icon: 'ss-icon-boxes'
+        - section: 'SilverShop\Brands\BrandAdmin'
+          icon: 'ss-icon-tag'
+        - section: 'SilverShop\Colors\ColorAdmin'
+          icon: 'ss-icon-palette'
+    - group: 'Finance'
+      icon: 'ss-icon-banknote'
+      priority: 80
+      children:
+        - section: 'SilverShop\Discounts\Admin\DiscountModelAdmin'
+          icon: 'ss-icon-badge-percent'
+        - section: 'SilverShop\Invoicing\InvoiceAdmin'
+          icon: 'ss-icon-receipt'
+        - section: 'SilverShop\Invoicing\CreditMemoAdmin'
+          icon: 'ss-icon-receipt-text'
+        - section: 'SilverShop\Ledger\LedgerAdmin'
+          icon: 'ss-icon-book-open'
+    - group: 'Fulfilment'
+      icon: 'ss-icon-truck'
+      priority: 70
+      children:
+        - section: 'SilverShop\Shipping\Admin\ShippingMethodAdmin'
+          icon: 'ss-icon-truck'
+        - section: 'SilverShop\Shipping\Admin\ZoneAdmin'
+          icon: 'ss-icon-map-pin'
+    - group: 'Marketing & customers'
+      icon: 'ss-icon-megaphone'
+      priority: 60
+      children:
+        - section: 'SilverShop\Newsletter\Admin\NewsletterAdmin'
+          icon: 'ss-icon-mail'
+        - section: 'SilverShop\Reviews\Admin\ReviewsAdmin'
+          icon: 'ss-icon-star'
+        - section: 'SilverShop\StockAlerts\Admin\StockAlertsAdmin'
+          icon: 'ss-icon-bell-ring'
+        - section: 'SilverShop\AbandonedCart\Admin\AbandonedCartAdmin'
+          icon: 'ss-icon-shopping-cart'
+        - section: 'SilverShop\Usp\UspAdmin'
+          icon: 'ss-icon-circle-check'
+    - group: 'Insights'
+      icon: 'ss-icon-chart-line'
+      priority: 50
+      children:
+        - section: 'SilverStripe\Reports\ReportAdmin'
+          icon: 'ss-icon-chart-column'
+        - section: 'SilverShop\NotificationLog\Admin\NotificationLogAdmin'
+          icon: 'ss-icon-scroll-text'
+    - group: 'Content'
+      icon: 'ss-icon-file-text'
+      priority: 110
+      children:
+        - section: 'SilverStripe\CMS\Controllers\CMSMain'
+          icon: 'ss-icon-folder-tree'
+        - section: 'SilverStripe\AssetAdmin\Controller\AssetAdmin'
+          icon: 'ss-icon-image'
+        - section: 'SilverStripe\VersionedAdmin\ArchiveAdmin'
+          icon: 'ss-icon-archive'
+    - group: 'Settings'
+      icon: 'ss-icon-settings'
+      priority: 30
+      children:
+        - section: 'SilverStripe\SiteConfig\SiteConfigLeftAndMain'
+          icon: 'ss-icon-sliders-horizontal'
+        - section: 'SilverShop\CookieConsent\Admin\ConsentAdmin'
+          icon: 'ss-icon-cookie'
+        - section: 'SilverShop\Api\Admin\ApiAdmin'
+          icon: 'ss-icon-key-round'
+        - section: 'SilverStripe\Admin\SecurityAdmin'
+          icon: 'ss-icon-shield-check'

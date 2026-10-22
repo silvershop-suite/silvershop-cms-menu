@@ -1,0 +1,220 @@
+/* SilverShop CMS menu — grouped/collapsible CMS menu structure.
+ *
+ * The tuned look is xddesigners/silverstripe-better-menu's, reproduced here. Native-blend notes
+ * (per PLAN-cms-menu §3.4), and why this file is structured the way it is:
+ *
+ *  - Colours are exposed as overridable `--ss-menu-*` tokens on :root, so a consumer skin can
+ *    retune the menu without forking — the headline native-blend win that applies here.
+ *  - The token DEFAULTS are better-menu's exact values, which are themselves the SilverStripe
+ *    admin's own hard-coded left-menu colours (`#d8e4eb` hover/selected, `#497792` accent). The
+ *    admin does NOT expose these as `--bs-*` tokens and the left sidebar is theme-FIXED (its
+ *    background is a literal `hsl(202,32%,93%)`, unchanged in dark mode), so aliasing to `--bs-*`
+ *    or adding a dark override would CHANGE the appearance and break parity with the tuned look.
+ *    Hence the values stay exact rather than `--bs-`-aliased — native-blend tokens, verbatim values.
+ *  - Icon alignment, colour and opacity are emitted by the PHP extension (config-driven). Icon
+ *    selectors target `ss-icon-*` (Lucide) where better-menu targeted `fa-*`, and the collapse-state
+ *    class is `cms-menu__group--open` (better-menu's `bt-open`). Units are px/em exactly as the
+ *    tuned CSS (no `rem` — the admin sets html to 62.5%).
+ */
+
+:root {
+    /* Overridable menu tokens — defaults = better-menu's tuned values (= the admin's own fixed
+       left-menu palette). Retune these in a consumer skin; do not alias to --bs-* (see header). */
+    --ss-menu-hover-bg: rgb(216, 228, 235);        /* child/header hover + selected background (#d8e4eb) */
+    --ss-menu-active-accent: rgb(73, 119, 146);    /* active child left-accent bar (#497792) */
+    --ss-menu-group-divider: rgba(0, 45, 80, 0.13); /* top/bottom lines bounding a group's children */
+}
+
+.cms-menu__list li.cms-menu__group {
+    position: relative;
+}
+
+/* Long group titles wrap to a second line (like the submenu children) instead of running under the
+   chevron. Reserve the chevron button's width (44px) on the right of the header so the title wraps
+   before it — the native `.text` already wraps (white-space:normal) and the row's padding is
+   symmetric, so a two-line header stays vertically centred and the chevron keeps aligning with the
+   first line. `break-word` guards against an over-long single word (long-locale compounds). */
+.cms-menu__list li.cms-menu__group > a {
+    padding-right: 44px;
+}
+
+.cms-menu__list li.cms-menu__group > a .text {
+    overflow-wrap: break-word;
+}
+
+/* Subtle background fade on hover / selection. */
+.cms-menu__list li a {
+    transition: background-color 300ms ease;
+}
+
+/* Chevron toggle over the right of the group's header row (not the children). */
+.cms-menu__list .cms-menu__group-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 44px;
+    height: 52px; /* match the native header row so the chevron is vertically centred */
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    opacity: 0.6;
+}
+
+.cms-menu__list .cms-menu__group-toggle:hover {
+    opacity: 1;
+}
+
+.cms-menu__list .cms-menu__group-toggle i {
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Animated chevron rotate (down → up). The rotation is applied to a plain wrapper span, never
+   the icon element itself — a Font Awesome Pro kit force-resets transforms on its own icons, so
+   rotating the icon directly wouldn't stick; the wrapper is untouched by the icon font. */
+.cms-menu__list .cms-menu__group-chevron {
+    display: inline-flex;
+    transition: transform 300ms ease;
+}
+
+.cms-menu__list .cms-menu__group.cms-menu__group--open > .cms-menu__group-toggle .cms-menu__group-chevron {
+    transform: rotate(180deg);
+}
+
+/* Children list. */
+.cms-menu__list .cms-menu__group-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.cms-menu__list .cms-menu__group:not(.cms-menu__group--open) .cms-menu__group-items {
+    display: none;
+}
+
+/* Group children block: subtle lines delineating the group block (top + bottom), so the group
+   reads as one unit. */
+.cms-menu__list .cms-menu__group-items {
+    border-top: 1px solid var(--ss-menu-group-divider) !important;
+    border-bottom: 1px solid var(--ss-menu-group-divider) !important;
+}
+
+/* Group children: a compact, tightly-aligned nested list — indented, smaller icons sitting
+   right next to the title (overrides the native absolute-icon + title-margin layout). Default
+   rows use the same background as the normal menu items; the group is set apart by the indent,
+   smaller icons and the top/bottom divider lines. */
+.cms-menu__list .cms-menu__group-items > li > a {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5em;
+    padding: 8px 16px 8px 20px !important;
+    min-height: 0 !important;
+    box-shadow: none !important; /* drop the native inset edge line */
+}
+
+/* Default (non-active) rows: same background as the normal menu items. The active row keeps the
+   admin's standard selected background (theme-adaptive). */
+.cms-menu__list .cms-menu__group-items > li:not(.current) > a {
+    background: transparent !important;
+}
+
+/* Hover on a (non-active) child row — match the native menu hover background. (The :hover
+   selector is more specific than the transparent rule above, so it wins.) */
+.cms-menu__list .cms-menu__group-items > li:not(.current) > a:hover {
+    background: var(--ss-menu-hover-bg) !important;
+}
+
+/* Active child row gets the same left accent bar the native active items (.opened) have. Trim
+   the row's left padding by the border width so the icon/text stay aligned with the siblings. */
+.cms-menu__list .cms-menu__group-items > li.current {
+    border-left: 3px solid var(--ss-menu-active-accent) !important;
+}
+
+.cms-menu__list .cms-menu__group-items > li.current > a {
+    padding-left: 17px !important;
+}
+
+/* Group header shows the standard selected background when the group is the active section (i.e.
+   a child beneath it is selected), matching the native active items. */
+.cms-menu__list li.cms-menu__group.current > a {
+    background: var(--ss-menu-hover-bg) !important;
+}
+
+.cms-menu__list .cms-menu__group-items > li > a .menu__icon[class*="ss-icon-"] {
+    position: static !important;
+    display: inline-flex !important;
+    width: 1.1em !important;
+    height: auto !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+}
+
+.cms-menu__list .cms-menu__group-items > li > a .text {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Count badge — a small pill pinned to the right of a menu row. Structure only; the colours are
+   emitted by the PHP extension (global `badge_color`/`badge_text_color`, with per-item overrides)
+   so they can follow config. The row needs a positioning context. */
+.cms-menu__list li {
+    position: relative;
+}
+
+.cms-menu__list .cms-menu__badge {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* ------------------------------------------------------------------------- *
+ * Collapsed-menu (icons-only) tweaks.
+ *
+ * Collapsed is a pure icon rail — it only narrows the menu, it does NOT change behaviour: no
+ * section chevrons/arrows, and no hover-reveal of a group's children (the better-menu hover
+ * flyout is intentionally dropped). A group just shows its own icon; its children follow the
+ * server-rendered open state, never a hover. To open a different group, expand the menu first.
+ * ------------------------------------------------------------------------- */
+
+/* The attention count badge has no room in the 60px icon rail — hide it when collapsed. */
+.cms-menu.collapsed .cms-menu__badge {
+    display: none;
+}
+
+/* No section chevrons/arrows in the icon rail. */
+.cms-menu.collapsed .cms-menu__list .cms-menu__group-toggle {
+    display: none;
+}
+
+/* No animation when collapsing / expanding. The admin puts `transition: all` on .cms-menu, .cms-menu__list
+   and .cms-content/.cms-container, and the menu-row icons carry their own 0.3s transition — so the width
+   change animates and the icons slide to their new position. Snap everything involved instead. (Item links
+   keep their background-color hover fade; only their inner icon/text snap.) */
+.cms-menu,
+.cms-menu .cms-menu__list,
+.cms-menu .cms-menu__list li,
+.cms-menu .cms-menu__list li a *,
+.cms-container,
+.cms-content {
+    transition: none !important;
+}

@@ -1,0 +1,12 @@
+en:
+  'SilverShop\CmsMenu':
+    Toggle: 'Toggle group'
+  'SilverShop\CmsMenu\Group':
+    Shop: 'Shop'
+    Catalog: 'Catalog'
+    Finance: 'Finance'
+    Fulfilment: 'Fulfilment'
+    Marketing_customers: 'Marketing & customers'
+    Insights: 'Insights'
+    Content: 'Content'
+    Settings: 'Settings'
