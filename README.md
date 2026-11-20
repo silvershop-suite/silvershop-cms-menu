@@ -1,5 +1,7 @@
 # silvershop-suite/cms-menu
 
+[![CI](https://github.com/silvershop-suite/silvershop-cms-menu/actions/workflows/ci.yml/badge.svg)](https://github.com/silvershop-suite/silvershop-cms-menu/actions/workflows/ci.yml)
+
 Grouped, collapsible **CMS left menu** for the SilverShop suite (Silverstripe CMS 6 / admin 3).
 It nests the stock flat admin menu into **config-driven groups** with **icons**, a dependency-free
 **chevron toggle**, **active-group auto-expand**, and **count badges** (e.g. orders needing
@@ -104,5 +106,9 @@ SilverShop\CmsMenu\CmsMenu:
 
 ## License
 
-BSD-3-Clause. Grouping engine, toggle and badge mechanism adopted from
+BSD-3-Clause. See [LICENSE](LICENSE). Grouping engine, toggle and badge mechanism adopted from
 `xddesigners/silverstripe-better-menu` (BSD-3, © Remy Vaartjes / XD).
+
+## Credits
+
+Built and maintained by **Remy Vaartjes** (<remy@xd.nl>) — part of the **SilverShop-Suite**.
