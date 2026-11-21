@@ -1,0 +1,12 @@
+it:
+  'SilverShop\CmsMenu':
+    Toggle: 'Espandi/comprimi gruppo'
+  'SilverShop\CmsMenu\Group':
+    Shop: 'Negozio'
+    Catalog: 'Catalogo'
+    Finance: 'Finanze'
+    Fulfilment: 'Spedizioni'
+    Marketing_customers: 'Marketing & clienti'
+    Insights: 'Analisi'
+    Content: 'Contenuti'
+    Settings: 'Impostazioni'

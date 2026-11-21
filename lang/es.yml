@@ -1,0 +1,12 @@
+es:
+  'SilverShop\CmsMenu':
+    Toggle: 'Expandir/contraer grupo'
+  'SilverShop\CmsMenu\Group':
+    Shop: 'Tienda'
+    Catalog: 'Catálogo'
+    Finance: 'Finanzas'
+    Fulfilment: 'Envíos'
+    Marketing_customers: 'Marketing & clientes'
+    Insights: 'Análisis'
+    Content: 'Contenido'
+    Settings: 'Configuración'

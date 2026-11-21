@@ -1,0 +1,12 @@
+fr:
+  'SilverShop\CmsMenu':
+    Toggle: 'Afficher/masquer le groupe'
+  'SilverShop\CmsMenu\Group':
+    Shop: 'Boutique'
+    Catalog: 'Catalogue'
+    Finance: 'Finances'
+    Fulfilment: 'Expédition'
+    Marketing_customers: 'Marketing & clients'
+    Insights: 'Analyses'
+    Content: 'Contenu'
+    Settings: 'Paramètres'
